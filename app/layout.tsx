@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Html, Head, Main, NextScript } from 'next/document';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,7 +26,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        
+      {/* <!-- Google tag (gtag.js) --> */}
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-C5YSQ1WBMK"></script>
+        <script>
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-C5YSQ1WBMK');
+          `}
+        </script>
         <meta name="google-adsense-account" content="ca-pub-1904054750988966" />
       </head>
       <body
