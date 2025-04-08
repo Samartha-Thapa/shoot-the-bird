@@ -4,27 +4,40 @@ import { useEffect } from 'react'
 
 export function AdSpace() {
   useEffect(() => {
-    // Only run on client-side
     if (typeof window === 'undefined') return
 
-    const scriptId = 'monetag-script'
-    
-    // Check if script already exists to avoid duplicates
-    if (document.getElementById(scriptId)) return
+    // First ad container
+    const script1 = document.createElement('script')
+    script1.innerHTML = `
+      (function(d, z, s, id) {
+        s.src = 'https://' + d + '/400/' + z;
+        s.id = id;
+        try {
+          document.getElementById(id + '-container').appendChild(s)
+        } catch(e) {}
+      })('vemtoutcheeg.com', 9188844, document.createElement('script'), 'monetag-ad-1')
+    `
+    document.body.appendChild(script1)
 
-    const script = document.createElement('script')
-    script.id = scriptId
-    script.innerHTML = `(function(d,z,s){s.src='https://'+d+'/400/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('vemtoutcheeg.com',9188844,document.createElement('script'))`
-    
-    // Append to document
-    document.body.appendChild(script)
+    // Second ad container (with different zone ID if needed)
+    const script2 = document.createElement('script')
+    script2.innerHTML = `
+      (function(d, z, s, id) {
+        s.src = 'https://' + d + '/400/' + z;
+        s.id = id;
+        try {
+          document.getElementById(id + '-container').appendChild(s)
+        } catch(e) {}
+      })('vemtoutcheeg.com', 9188845, document.createElement('script'), 'monetag-ad-2')
+    `
+    document.body.appendChild(script2)
 
-    // Cleanup function
     return () => {
-      const existingScript = document.getElementById(scriptId)
-      if (existingScript) {
-        document.body.removeChild(existingScript)
-      }
+      [script1, script2].forEach(script => {
+        if (document.body.contains(script)) {
+          document.body.removeChild(script)
+        }
+      })
     }
   }, [])
 
@@ -32,8 +45,8 @@ export function AdSpace() {
     <div className="flex flex-col gap-4">
       {/* First Ad Container */}
       <div 
+        id="monetag-ad-1-container"
         className="border-2 border-dashed border-gray-300 rounded-lg h-[250px] flex items-center justify-center bg-gray-50"
-        id="monetag-ad-container-1"
       >
         <div className="text-center p-4">
           <p className="text-gray-500 font-medium">Advertisement</p>
@@ -43,8 +56,8 @@ export function AdSpace() {
 
       {/* Second Ad Container */}
       <div 
+        id="monetag-ad-2-container"
         className="border-2 border-dashed border-gray-300 rounded-lg h-[250px] flex items-center justify-center bg-gray-50"
-        id="monetag-ad-container-2"
       >
         <div className="text-center p-4">
           <p className="text-gray-500 font-medium">Advertisement</p>
